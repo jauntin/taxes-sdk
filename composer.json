@@ -1,0 +1,46 @@
+{
+    "name": "jauntin/taxes-sdk",
+    "description": "SDK for integrating with Jauntin's Taxes microservice",
+    "keywords": [
+        "jauntin",
+        "taxes-sdk"
+    ],
+    "homepage": "https://github.com/jauntin/taxes-sdk",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Alexei Andreiev",
+            "email": "alex@jauntin.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "guzzlehttp/guzzle": "^7.0",
+        "moneyphp/money": "^4.1"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jauntin\\Taxes\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jauntin\\Taxes\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "analyze": "vendor/bin/phpcs && vendor/bin/phpstan analyse --memory-limit=1G",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
