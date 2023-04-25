@@ -11,7 +11,8 @@ use Orchestra\Testbench\TestCase;
 
 class TaxesServiceTest extends TestCase
 {
-    use TestCases, MocksClient;
+    use TestCases;
+    use MocksClient;
 
     private TaxesService $service;
 

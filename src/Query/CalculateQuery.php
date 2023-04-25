@@ -44,7 +44,7 @@ class CalculateQuery
      */
     public function calculate(Money|int $preSurcharge): Calculated
     {
-        $this->params['amount'] = $preSurcharge instanceof Money? $preSurcharge->getAmount() : $preSurcharge;
+        $this->params['amount'] = $preSurcharge instanceof Money ? $preSurcharge->getAmount() : $preSurcharge;
         $result = $this->client->calculateTaxes($this->params);
 
         return new Calculated($result);
