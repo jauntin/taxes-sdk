@@ -2,6 +2,7 @@
 
 namespace Jauntin\TaxesSdk\Tests\Unit;
 
+use Illuminate\Validation\ValidationException;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
 use Jauntin\TaxesSdk\TaxesService;
 use Jauntin\TaxesSdk\Tests\MocksClient;
@@ -37,6 +38,41 @@ class TaxesServiceTest extends TestCase
 
         $this->assertIsArray($result->getTaxes());
         $this->assertInstanceOf(Money::class, $result->getTotal());
+    }
+
+    public function testAtLeastOneTaxTypeIsRequired()
+    {
+        $this->expectException(ValidationException::class);
+        try {
+            $this->service->taxes([])->calculate(100);
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('taxTypes', $e->errors());
+            $this->assertArrayNotHasKey('municipalCode', $e->errors());
+            throw $e;
+        }
+    }
+
+    public function testStateIsRequired()
+    {
+        $this->expectException(ValidationException::class);
+        try {
+            $this->service->taxes(['surplus'])->calculate(100);
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('state', $e->errors());
+            $this->assertArrayNotHasKey('municipalCode', $e->errors());
+            throw $e;
+        }
+    }
+
+    public function testMunicipalCodeIsRequiredWithMunicipalTaxType()
+    {
+        $this->expectException(ValidationException::class);
+        try {
+            $this->service->taxes(['municipal'])->state('KY')->calculate(100);
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('municipalCode', $e->errors());
+            throw $e;
+        }
     }
 
     public function testShouldLookup()
