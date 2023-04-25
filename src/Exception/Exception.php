@@ -1,6 +1,6 @@
 <?php
 
-namespace Jauntin\Taxes\Exception;
+namespace Jauntin\TaxesSdk\Exception;
 
 class Exception extends \Exception
 {
