@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 trait MocksClient
 {
-
     /**
      * @return void
      */
@@ -41,8 +40,7 @@ trait MocksClient
                             'amount'   => $faker->randomNumber(4),
                             'currency' => 'USD',
                         ],
-                    ])
-                );
+                    ]));
             },
             'dev.taxes.jauntin.com/api/v1/taxes/lookup/locations*' => function (Request $request, array $options) use ($faker) {
                 $state = $options['laravel_data']['state'] ?? 'NY';

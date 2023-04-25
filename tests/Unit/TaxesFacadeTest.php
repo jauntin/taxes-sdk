@@ -11,7 +11,8 @@ use Orchestra\Testbench\TestCase;
 
 class TaxesFacadeTest extends TestCase
 {
-    use TestCases, MocksClient;
+    use TestCases;
+    use MocksClient;
 
     protected function setUp(): void
     {

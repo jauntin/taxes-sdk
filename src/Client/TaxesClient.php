@@ -101,12 +101,12 @@ class TaxesClient
             $response = $handler($this->prepareRequest());
         } catch (RequestException $e) {
             $response = $e->response;
-        } finally {
-            if ($response->successful()) {
-                return $response;
-            }
-
-            throw new ClientException($response->body(), $response->status(), $response->toException());
         }
+
+        if ($response->successful()) {
+            return $response;
+        }
+
+        throw new ClientException($response->body(), $response->status(), $response->toException());
     }
 }

@@ -8,7 +8,8 @@ use Jauntin\TaxesSdk\Query\CalculateQuery;
 
 class TaxesService
 {
-    public function __construct(private readonly TaxesClient $client) {
+    public function __construct(private readonly TaxesClient $client)
+    {
     }
 
     /**
