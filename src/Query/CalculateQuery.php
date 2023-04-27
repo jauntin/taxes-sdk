@@ -9,6 +9,7 @@ use Jauntin\TaxesSdk\Client\CacheableTaxesClient;
 use Jauntin\TaxesSdk\Exception\ClientException;
 use Jauntin\TaxesSdk\Query\Result\Calculated;
 use Jauntin\TaxesSdk\TaxType;
+use Mockery;
 use Money\Money;
 
 class CalculateQuery
@@ -32,7 +33,7 @@ class CalculateQuery
      */
     public function taxes(array $taxes): self
     {
-        $this->params['taxTypes'] = $taxes;
+        $this->params['taxTypes'] = array_map(fn(TaxType|string $t) => $t instanceof TaxType ? $t->value : $t, $taxes);
 
         return $this;
     }
@@ -73,6 +74,19 @@ class CalculateQuery
         $result = $this->client->calculateTaxes($this->params);
 
         return new Calculated($result);
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return CalculateQuery
+     */
+    public static function mock(array $result): CalculateQuery
+    {
+        $mock = Mockery::mock(self::class)->makePartial();
+        $mock->shouldReceive('calculate')->andReturn(new Calculated($result));
+
+        return $mock;
     }
 
     /**
