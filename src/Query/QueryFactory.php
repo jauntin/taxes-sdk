@@ -3,6 +3,7 @@
 namespace Jauntin\TaxesSdk\Query;
 
 use Illuminate\Validation\Factory as Validator;
+use Jauntin\TaxesSdk\Client\CacheableTaxesClientDecorator;
 use Jauntin\TaxesSdk\Client\TaxesClient;
 
 class QueryFactory
@@ -15,11 +16,11 @@ class QueryFactory
     }
 
     /**
-     * @param TaxesClient $client
+     * @param CacheableTaxesClientDecorator $client
      *
      * @return CalculateQuery
      */
-    public function make(TaxesClient $client): CalculateQuery
+    public function make(CacheableTaxesClientDecorator $client): CalculateQuery
     {
         return new CalculateQuery($client, $this->validator);
     }

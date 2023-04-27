@@ -22,6 +22,19 @@ class TaxesClient
     /**
      * @throws ClientException
      */
+    public function getTaxes(array $params): array
+    {
+        $url      = sprintf('%s/api/v1/taxes', $this->serviceUrl);
+        $response = $this->handleRequest(
+            fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
+        );
+
+        return $response->json();
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function calculateTaxes(array $params): array
     {
         $url      = sprintf('%s/api/v1/taxes/calculate', $this->serviceUrl);

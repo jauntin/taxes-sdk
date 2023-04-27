@@ -2,14 +2,14 @@
 
 namespace Jauntin\TaxesSdk;
 
-use Jauntin\TaxesSdk\Client\TaxesClient;
+use Jauntin\TaxesSdk\Client\CacheableTaxesClientDecorator;
 use Jauntin\TaxesSdk\Exception\ClientException;
 use Jauntin\TaxesSdk\Query\CalculateQuery;
 use Jauntin\TaxesSdk\Query\QueryFactory;
 
 class TaxesService
 {
-    public function __construct(private readonly TaxesClient $client, private readonly QueryFactory $queryFactory)
+    public function __construct(private readonly CacheableTaxesClientDecorator $client, private readonly QueryFactory $queryFactory)
     {
     }
 
