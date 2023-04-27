@@ -5,6 +5,7 @@ namespace Jauntin\TaxesSdk;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use Jauntin\TaxesSdk\Client\TaxesClient;
+use Jauntin\TaxesSdk\Query\QueryFactory;
 
 class TaxesSdkServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,8 @@ class TaxesSdkServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'taxes-sdk');
 
         $this->app->singleton(TaxesClient::class, fn() => new TaxesClient(config('taxes-sdk.uri')));
-        $this->app->singleton(TaxesService::class, fn(Container $container) => new TaxesService($container->get(TaxesClient::class)));
+        $this->app->singleton(TaxesService::class, fn(Container $container) =>
+            new TaxesService($container->get(TaxesClient::class), $container->get(QueryFactory::class))
+        );
     }
 }

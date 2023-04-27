@@ -5,10 +5,11 @@ namespace Jauntin\TaxesSdk;
 use Jauntin\TaxesSdk\Client\TaxesClient;
 use Jauntin\TaxesSdk\Exception\ClientException;
 use Jauntin\TaxesSdk\Query\CalculateQuery;
+use Jauntin\TaxesSdk\Query\QueryFactory;
 
 class TaxesService
 {
-    public function __construct(private readonly TaxesClient $client)
+    public function __construct(private readonly TaxesClient $client, private readonly QueryFactory $queryFactory)
     {
     }
 
@@ -19,7 +20,7 @@ class TaxesService
      */
     public function taxes(array $taxes): CalculateQuery
     {
-         return (new CalculateQuery($this->client))->taxes($taxes);
+         return $this->newQuery()->taxes($taxes);
     }
 
     /**
@@ -36,5 +37,13 @@ class TaxesService
     public function lookupTaxLocations(string $state, string $search): array
     {
         return $this->client->lookupTaxLocations($state, $search);
+    }
+
+    /**
+     * @return CalculateQuery
+     */
+    private function newQuery(): CalculateQuery
+    {
+        return $this->queryFactory->make($this->client);
     }
 }
