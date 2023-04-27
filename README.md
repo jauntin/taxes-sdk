@@ -1,5 +1,23 @@
 # Taxes SDK
+### Installation
+1. Add SDK repository to `composer.json`
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/jauntin/taxes-sdk"
+    }
+  ]
+}
+```
+2. Install package
 
+`composer require jauntin/taxes-sdk`
+
+3. Publish config by running
+
+`php artisan vendor:publish --provider="Jauntin\\TaxesSdk\\TaxesSdkServiceProvider" --tag="config"`
 
 ### Examples
 #### Tax model
