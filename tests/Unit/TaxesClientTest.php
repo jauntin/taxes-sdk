@@ -4,14 +4,14 @@ namespace Jauntin\TaxesSdk\Tests\Unit;
 
 use Jauntin\TaxesSdk\Client\TaxesClient;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
-use Jauntin\TaxesSdk\Tests\MocksClient;
+use Jauntin\TaxesSdk\Tests\Mockable;
 use Jauntin\TaxesSdk\Tests\TestCases;
 use Orchestra\Testbench\TestCase;
 
 class TaxesClientTest extends TestCase
 {
     use TestCases;
-    use MocksClient;
+    use Mockable;
 
     private TaxesClient $client;
 
@@ -26,7 +26,7 @@ class TaxesClientTest extends TestCase
     /**
      * @dataProvider pricingTestCaseProvider
      */
-    public function testCalculateMany(array $input, int $surchargeAmount)
+    public function testCalculateMany(array $input)
     {
         $calculated = $this->client->calculateTaxes($input);
         $this->assertArrayHasKey('taxes', $calculated);

@@ -2,9 +2,11 @@
 
 namespace Jauntin\TaxesSdk\Tests\Unit;
 
+use Jauntin\TaxesSdk\Query\Result\Calculated;
 use Jauntin\TaxesSdk\TaxesFacade;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
-use Jauntin\TaxesSdk\Tests\MocksClient;
+use Jauntin\TaxesSdk\TaxType;
+use Jauntin\TaxesSdk\Tests\Mockable;
 use Jauntin\TaxesSdk\Tests\TestCases;
 use Money\Money;
 use Orchestra\Testbench\TestCase;
@@ -12,7 +14,7 @@ use Orchestra\Testbench\TestCase;
 class TaxesFacadeTest extends TestCase
 {
     use TestCases;
-    use MocksClient;
+    use Mockable;
 
     protected function setUp(): void
     {
@@ -23,7 +25,7 @@ class TaxesFacadeTest extends TestCase
     /**
      * @dataProvider pricingTestCaseProvider
      */
-    public function testTaxes(array $input, int $preSurcharge)
+    public function testTaxes(array $input)
     {
         $query = TaxesFacade::taxes($input['taxTypes'])->state($input['state']);
         if (isset($input['municipalCode'])) {
@@ -50,6 +52,47 @@ class TaxesFacadeTest extends TestCase
         $locations = TaxesFacade::lookupTaxLocations('NY', 'brooklyn');
         $this->assertIsArray($locations);
         $this->assertEmpty($locations);
+    }
+
+    public function testMockSelf()
+    {
+        TaxesFacade::shouldReceive('shouldLookup')->once()->andReturn(false);
+        TaxesFacade::shouldReceive('lookupTaxLocations')->once()->andReturn([]);
+        $this->assertFalse(TaxesFacade::shouldLookup('NY'));
+        $this->assertEmpty(TaxesFacade::lookupTaxLocations('NY', 'brooklyn'));
+    }
+
+    public function testMockCalculateQuery()
+    {
+        TaxesFacade::shouldReceive('taxes')->once()->andReturn($this->mockQuery([
+            'taxes' => [
+                [
+                    'state'         => 'KY',
+                    'type'          => 'AdChrg',
+                    'code'          => 'AFKY1',
+                    'rate'          => 0.05,
+                    'municipalCode' => '0001',
+                    'municipalName' => 'LOUISVILLE - JEFFERSON',
+                    'amount'        => [
+                        'amount'   => 500,
+                        'currency' => 'USD',
+                    ],
+                ],
+            ],
+            'total' => [
+                'amount'   => 500,
+                'currency' => 'USD',
+            ],
+        ]));
+
+        $calculated = TaxesFacade::taxes([TaxType::MUNICIPAL])
+            ->state('KY')
+            ->withMunicipal('0001')
+            ->calculate(10000);
+
+        $this->assertInstanceOf(Calculated::class, $calculated);
+        $this->assertInstanceOf(Money::class, $calculated->getTotal());
+        $this->assertCount(1, $calculated->getTaxes());
     }
 
     protected function getPackageProviders($app): array

@@ -2,12 +2,13 @@
 
 namespace Jauntin\TaxesSdk\Query;
 
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Factory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Jauntin\TaxesSdk\Client\TaxesClient;
+use Jauntin\TaxesSdk\Client\CacheableTaxesClient;
 use Jauntin\TaxesSdk\Exception\ClientException;
 use Jauntin\TaxesSdk\Query\Result\Calculated;
+use Jauntin\TaxesSdk\TaxType;
 use Money\Money;
 
 class CalculateQuery
@@ -16,17 +17,31 @@ class CalculateQuery
         'taxTypes' => [],
     ];
 
-    public function __construct(private readonly TaxesClient $client)
+    /**
+     * @param CacheableTaxesClient $client
+     * @param Factory $validator
+     */
+    public function __construct(private readonly CacheableTaxesClient $client, private readonly Factory $validator)
     {
     }
 
+    /**
+     * @param array<int, TaxType|string> $taxes
+     *
+     * @return $this
+     */
     public function taxes(array $taxes): self
     {
-        $this->params['taxTypes'] = $taxes;
+        $this->params['taxTypes'] = array_map(fn(TaxType|string $t) => $t instanceof TaxType ? $t->value : $t, $taxes);
 
         return $this;
     }
 
+    /**
+     * @param string $state
+     *
+     * @return $this
+     */
     public function state(string $state): self
     {
         $this->params['state'] = $state;
@@ -34,10 +49,16 @@ class CalculateQuery
         return $this;
     }
 
+    /**
+     * @param string $municipalCode
+     *
+     * @return $this
+     */
     public function withMunicipal(string $municipalCode): self
     {
         $this->params['municipalCode'] = $municipalCode;
-        $this->params['taxTypes'] = array_unique([...$this->params['taxTypes'], 'municipal']);
+        $this->params['taxTypes'][] = TaxType::MUNICIPAL->value;
+        $this->params['taxTypes'] = array_unique($this->params['taxTypes']);
 
         return $this;
     }
@@ -59,11 +80,14 @@ class CalculateQuery
      */
     private function validate(): void
     {
-        Validator::validate($this->params, [
-            'taxTypes' => ['required', 'array', 'min:1'],
-            'state'    => ['required', 'string'],
-            'amount'   => ['required', 'int', 'min:1'],
-            'municipalCode' => [Rule::requiredIf(in_array('municipal', $this->params['taxTypes'])), 'string'],
+        $requiredWithMunicipal = Rule::requiredIf(in_array(TaxType::MUNICIPAL->value, $this->params['taxTypes']));
+
+        $this->validator->validate($this->params, [
+            'taxTypes'      => ['required', 'array', 'min:1'],
+            'taxTypes.*'    => ['required', Rule::in(TaxType::types())],
+            'state'         => ['required', 'string'],
+            'amount'        => ['required', 'int', 'min:1'],
+            'municipalCode' => [$requiredWithMunicipal, 'string'],
         ]);
     }
 }
