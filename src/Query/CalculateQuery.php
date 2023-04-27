@@ -5,7 +5,7 @@ namespace Jauntin\TaxesSdk\Query;
 use Illuminate\Validation\Factory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Jauntin\TaxesSdk\Client\CacheableTaxesClientDecorator;
+use Jauntin\TaxesSdk\Client\CacheableTaxesClient;
 use Jauntin\TaxesSdk\Exception\ClientException;
 use Jauntin\TaxesSdk\Query\Result\Calculated;
 use Jauntin\TaxesSdk\TaxType;
@@ -18,10 +18,10 @@ class CalculateQuery
     ];
 
     /**
-     * @param CacheableTaxesClientDecorator $client
+     * @param CacheableTaxesClient $client
      * @param Factory $validator
      */
-    public function __construct(private readonly CacheableTaxesClientDecorator $client, private readonly Factory $validator)
+    public function __construct(private readonly CacheableTaxesClient $client, private readonly Factory $validator)
     {
     }
 

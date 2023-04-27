@@ -4,7 +4,7 @@ namespace Jauntin\TaxesSdk\Tests\Unit;
 
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Facades\Cache;
-use Jauntin\TaxesSdk\Client\CacheableTaxesClientDecorator;
+use Jauntin\TaxesSdk\Client\CacheableTaxesClient;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
 use Jauntin\TaxesSdk\Tests\MocksClient;
 use Orchestra\Testbench\TestCase;
@@ -13,13 +13,13 @@ class CacheableTaxesClientTest extends TestCase
 {
     use MocksClient;
 
-    private CacheableTaxesClientDecorator $decorator;
+    private CacheableTaxesClient $decorator;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->decorator = $this->app->get(CacheableTaxesClientDecorator::class);
+        $this->decorator = $this->app->get(CacheableTaxesClient::class);
     }
 
     public function testGetTaxesFromCache()

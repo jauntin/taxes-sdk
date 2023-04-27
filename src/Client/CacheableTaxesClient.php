@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 /**
  * @mixin TaxesClient
  */
-class CacheableTaxesClientDecorator
+class CacheableTaxesClient
 {
     public function __construct(private readonly TaxesClient $client)
     {
@@ -27,7 +27,7 @@ class CacheableTaxesClientDecorator
             throw new BadMethodCallException(sprintf('Call to undefined method %s::%s()', get_class($this->client), $name));
         }
 
-        $key = sprintf('%s_%s', $name, serialize($arguments));
+        $key = sprintf('taxes-sdk_%s_%s', $name, serialize($arguments));
 
         return $this->wrapCache($key, fn() => $this->client->$name(...$arguments));
     }

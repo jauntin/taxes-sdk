@@ -4,7 +4,7 @@ namespace Jauntin\TaxesSdk;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
-use Jauntin\TaxesSdk\Client\CacheableTaxesClientDecorator;
+use Jauntin\TaxesSdk\Client\CacheableTaxesClient;
 use Jauntin\TaxesSdk\Client\TaxesClient;
 use Jauntin\TaxesSdk\Query\QueryFactory;
 
@@ -28,10 +28,10 @@ class TaxesSdkServiceProvider extends ServiceProvider
 
         $this->app->singleton(TaxesClient::class, fn() => new TaxesClient(config('taxes-sdk.api_uri')));
 
-        $this->app->singleton(CacheableTaxesClientDecorator::class, fn(Container $container) =>
-            new CacheableTaxesClientDecorator($container->get(TaxesClient::class)));
+        $this->app->singleton(CacheableTaxesClient::class, fn(Container $container) =>
+            new CacheableTaxesClient($container->get(TaxesClient::class)));
 
         $this->app->singleton(TaxesService::class, fn(Container $container) =>
-            new TaxesService($container->get(CacheableTaxesClientDecorator::class), $container->get(QueryFactory::class)));
+            new TaxesService($container->get(CacheableTaxesClient::class), $container->get(QueryFactory::class)));
     }
 }
