@@ -44,5 +44,15 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jauntin\\TaxesSdk\\TaxesSdkServiceProvider"
+            ],
+            "aliases": {
+                "TaxesFacade": "Jauntin\\TaxesSdk\\TaxesFacade"
+            }
+        }
     }
 }
