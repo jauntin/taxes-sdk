@@ -6,12 +6,12 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Facades\Cache;
 use Jauntin\TaxesSdk\Client\CacheableTaxesClient;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
-use Jauntin\TaxesSdk\Tests\MocksClient;
+use Jauntin\TaxesSdk\Tests\Mockable;
 use Orchestra\Testbench\TestCase;
 
 class CacheableTaxesClientTest extends TestCase
 {
-    use MocksClient;
+    use Mockable;
 
     private CacheableTaxesClient $decorator;
 

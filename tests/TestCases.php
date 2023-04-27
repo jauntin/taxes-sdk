@@ -7,7 +7,7 @@ trait TestCases
     /**
      * Pricing test cases.
      */
-    public function pricingTestCaseProvider(): array
+    protected function pricingTestCaseProvider(): array
     {
         return [
             'kentuckyWithMunicipal' => [

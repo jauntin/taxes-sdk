@@ -2,12 +2,11 @@
 
 namespace Jauntin\TaxesSdk\Tests\Unit;
 
-use Jauntin\TaxesSdk\Query\CalculateQuery;
 use Jauntin\TaxesSdk\Query\Result\Calculated;
 use Jauntin\TaxesSdk\TaxesFacade;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
 use Jauntin\TaxesSdk\TaxType;
-use Jauntin\TaxesSdk\Tests\MocksClient;
+use Jauntin\TaxesSdk\Tests\Mockable;
 use Jauntin\TaxesSdk\Tests\TestCases;
 use Money\Money;
 use Orchestra\Testbench\TestCase;
@@ -15,7 +14,7 @@ use Orchestra\Testbench\TestCase;
 class TaxesFacadeTest extends TestCase
 {
     use TestCases;
-    use MocksClient;
+    use Mockable;
 
     protected function setUp(): void
     {
@@ -65,7 +64,7 @@ class TaxesFacadeTest extends TestCase
 
     public function testMockCalculateQuery()
     {
-        TaxesFacade::shouldReceive('taxes')->once()->andReturn(CalculateQuery::mock([
+        TaxesFacade::shouldReceive('taxes')->once()->andReturn($this->mockQuery([
             'taxes' => [
                 [
                     'state'         => 'KY',

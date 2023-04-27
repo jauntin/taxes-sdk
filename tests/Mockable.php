@@ -5,8 +5,12 @@ namespace Jauntin\TaxesSdk\Tests;
 use Faker\Factory;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
+use Jauntin\TaxesSdk\Query\CalculateQuery;
+use Jauntin\TaxesSdk\Query\Result\Calculated;
+use Mockery;
+use Mockery\MockInterface;
 
-trait MocksClient
+trait Mockable
 {
     /**
      * @return void
@@ -92,5 +96,22 @@ trait MocksClient
                 ]));
             }
         ]);
+    }
+
+    /**
+     * @param array $result
+     * @param bool $partial
+     *
+     * @return MockInterface|CalculateQuery
+     */
+    protected function mockQuery(array $result, bool $partial = true): MockInterface|CalculateQuery
+    {
+        $query = Mockery::mock(CalculateQuery::class);
+        if ($partial) {
+            $query->makePartial();
+        }
+        $query->shouldReceive('calculate')->andReturn(new Calculated($result));
+
+        return $query;
     }
 }

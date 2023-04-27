@@ -5,7 +5,7 @@ namespace Jauntin\TaxesSdk\Tests\Unit;
 use Illuminate\Validation\ValidationException;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
 use Jauntin\TaxesSdk\TaxesService;
-use Jauntin\TaxesSdk\Tests\MocksClient;
+use Jauntin\TaxesSdk\Tests\Mockable;
 use Jauntin\TaxesSdk\Tests\TestCases;
 use Money\Money;
 use Orchestra\Testbench\TestCase;
@@ -13,7 +13,7 @@ use Orchestra\Testbench\TestCase;
 class TaxesServiceTest extends TestCase
 {
     use TestCases;
-    use MocksClient;
+    use Mockable;
 
     private TaxesService $service;
 
