@@ -79,12 +79,14 @@ class CalculateQuery
     /**
      * @param array $result
      *
-     * @return CalculateQuery
+     * @return CalculateQuery|Mockery\MockInterface
      */
-    public static function mock(array $result): CalculateQuery
+    public static function mock(array $result): self|Mockery\MockInterface
     {
         $mock = Mockery::mock(self::class)->makePartial();
-        $mock->shouldReceive('calculate')->andReturn(new Calculated($result));
+        /** @var Mockery\ExpectationInterface $expectation */
+        $expectation = $mock->shouldReceive('calculate');
+        $expectation->andReturn(new Calculated($result));
 
         return $mock;
     }
