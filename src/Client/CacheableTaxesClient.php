@@ -43,7 +43,7 @@ class CacheableTaxesClient
         $driver = config('taxes-sdk.cache.driver');
         $ttl    = config('taxes-sdk.cache.ttl');
 
-        if ($driver && $ttl && intval($ttl) > 0) {
+        if ($driver && $ttl && intval($ttl) >= 0) {
             return Cache::driver($driver)->remember($key, $ttl, $closure); // @phpstan-ignore-line
         }
 
