@@ -50,6 +50,30 @@ class CalculateQuery
     }
 
     /**
+     * @param array|string[] $codes
+     *
+     * @return $this
+     */
+    public function include(array $codes): self
+    {
+        $this->params['include'] = $codes;
+
+        return $this;
+    }
+
+    /**
+     * @param array|string[] $codes
+     *
+     * @return $this
+     */
+    public function exclude(array $codes): self
+    {
+        $this->params['exclude'] = $codes;
+
+        return $this;
+    }
+
+    /**
      * @param string $municipalCode
      *
      * @return $this
@@ -88,6 +112,10 @@ class CalculateQuery
             'state'         => ['required', 'string'],
             'amount'        => ['required', 'int', 'min:1'],
             'municipalCode' => [$requiredWithMunicipal, 'string'],
+            'include'       => ['array'],
+            'include.*'     => ['string'],
+            'exclude'       => ['array'],
+            'exclude.*'     => ['string'],
         ]);
     }
 }
