@@ -112,8 +112,10 @@ class CalculateQuery
             'state'         => ['required', 'string'],
             'amount'        => ['required', 'int', 'min:1'],
             'municipalCode' => [$requiredWithMunicipal, 'string'],
-            'codes'         => ['array'],
-            'codes.*'       => ['string'],
+            'include'       => ['array'],
+            'include.*'     => ['string'],
+            'exclude'       => ['array'],
+            'exclude.*'     => ['string'],
         ]);
     }
 }
