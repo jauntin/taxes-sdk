@@ -2,6 +2,7 @@
 
 namespace Jauntin\TaxesSdk\Query;
 
+use DateTime;
 use Illuminate\Validation\Factory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -88,6 +89,18 @@ class CalculateQuery
     }
 
     /**
+     * @param DateTime|string $startDate
+     *
+     * @return $this
+     */
+    public function setStartDate(DateTime|string $startDate): self
+    {
+        $this->params['startDate'] = $startDate instanceof DateTime ? $startDate->format('Y-m-d') : $startDate;
+
+        return $this;
+    }
+
+    /**
      * @throws ClientException|ValidationException
      */
     public function calculate(Money|int $preSurcharge): Calculated
@@ -116,6 +129,7 @@ class CalculateQuery
             'include.*'     => ['string'],
             'exclude'       => ['array'],
             'exclude.*'     => ['string'],
+            'startDate'     => ['date'],
         ]);
     }
 }

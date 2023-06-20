@@ -100,6 +100,15 @@ trait TestCases
                 ],
                 'surchargeAmount' => 6360,
             ],
+            'testCase7'             => [
+                'input'           => [
+                    'taxTypes'      => ['admitted'],
+                    'state'         => 'FL',
+                    'amount'        => 64900,
+                    'startDate'     => '2023-01-01',
+                ],
+                'surchargeAmount' => 0,
+            ],
         ];
     }
 }
