@@ -2,6 +2,7 @@
 
 namespace Jauntin\TaxesSdk\Tests\Unit;
 
+use Illuminate\Support\Carbon;
 use Jauntin\TaxesSdk\Query\Result\Calculated;
 use Jauntin\TaxesSdk\TaxesFacade;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
@@ -88,6 +89,7 @@ class TaxesFacadeTest extends TestCase
         $calculated = TaxesFacade::taxes([TaxType::MUNICIPAL])
             ->state('KY')
             ->withMunicipal('0001')
+            ->setStartDate(Carbon::parse('2022-12-01'))
             ->calculate(10000);
 
         $this->assertInstanceOf(Calculated::class, $calculated);
