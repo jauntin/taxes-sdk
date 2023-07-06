@@ -4,6 +4,7 @@ namespace Jauntin\TaxesSdk\Tests;
 
 use Faker\Factory;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Jauntin\TaxesSdk\Query\CalculateQuery;
 use Jauntin\TaxesSdk\Query\Result\Calculated;
@@ -20,7 +21,7 @@ trait Mockable
         $faker = Factory::create();
 
         Http::fake([
-            'dev.taxes.jauntin.com/api/v1/taxes/calculate*' => function (Request $request, array $options) use ($faker) {
+            Config::get('taxes-sdk.api_uri') . '/api/v1/taxes/calculate*' => function (Request $request, array $options) use ($faker) {
                 $tax       = [
                     'state'         => $options['laravel_data']['state'] ?? 'NY',
                     'type'          => 'foo',
@@ -39,14 +40,14 @@ trait Mockable
                 ]);
 
                 return Http::response(json_encode([
-                        'taxes' => isset($options['laravel_data']['municipalCode']) ? [$tax, $municipal] : [$tax],
-                        'total' => [
-                            'amount'   => $faker->randomNumber(4),
-                            'currency' => 'USD',
-                        ],
-                    ]));
+                    'taxes' => isset($options['laravel_data']['municipalCode']) ? [$tax, $municipal] : [$tax],
+                    'total' => [
+                        'amount'   => $faker->randomNumber(4),
+                        'currency' => 'USD',
+                    ],
+                ]));
             },
-            'dev.taxes.jauntin.com/api/v1/taxes/lookup/locations*' => function (Request $request, array $options) use ($faker) {
+            Config::get('taxes-sdk.api_uri') . '/api/v1/taxes/lookup/locations*' => function (Request $request, array $options) use ($faker) {
                 $state = $options['laravel_data']['state'] ?? 'NY';
 
                 if ($state === 'KY') {
@@ -88,7 +89,7 @@ trait Mockable
 
                 return Http::response(json_encode([]));
             },
-            'dev.taxes.jauntin.com/api/v1/taxes/lookup*' => function (Request $request, array $options) use ($faker) {
+            Config::get('taxes-sdk.api_uri') . '/api/v1/taxes/lookup*' => function (Request $request, array $options) use ($faker) {
                 $state = $options['laravel_data']['state'] ?? 'NY';
 
                 return Http::response(json_encode([
@@ -106,6 +107,7 @@ trait Mockable
      */
     protected function mockQuery(array $result, bool $partial = true): MockInterface|CalculateQuery
     {
+        /** @var MockInterface|CalculateQuery */
         $query = Mockery::mock(CalculateQuery::class);
         if ($partial) {
             $query->makePartial();
