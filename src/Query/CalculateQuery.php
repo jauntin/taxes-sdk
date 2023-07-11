@@ -112,15 +112,6 @@ class CalculateQuery
         return new Calculated($result);
     }
 
-    public function get(TaxType $taxType): array
-    {
-        try {
-            return $this->client->getTaxes($this->params, $taxType);
-        } catch (ClientException $e) {
-            return [];
-        }
-    }
-
     /**
      * @throws ValidationException
      */
