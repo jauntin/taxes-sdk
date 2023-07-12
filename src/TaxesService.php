@@ -40,6 +40,14 @@ class TaxesService
     }
 
     /**
+     * @throws ClientException
+     */
+    public function getList(TaxType $taxType, array $params): array
+    {
+        return $this->client->getTaxes($params, $taxType);
+    }
+
+    /**
      * @return CalculateQuery
      */
     private function newQuery(): CalculateQuery

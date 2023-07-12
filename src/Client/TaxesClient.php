@@ -8,6 +8,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Jauntin\TaxesSdk\Exception\ClientException;
+use Jauntin\TaxesSdk\TaxType;
 
 class TaxesClient
 {
@@ -22,9 +23,9 @@ class TaxesClient
     /**
      * @throws ClientException
      */
-    public function getTaxes(array $params): array
+    public function getTaxes(array $params, TaxType $taxType): array
     {
-        $url      = sprintf('%s/api/v1/taxes', $this->serviceUrl);
+        $url      = sprintf('%s/api/v1/taxes/%s', $this->serviceUrl, $taxType->value);
         $response = $this->handleRequest(
             fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
         );
