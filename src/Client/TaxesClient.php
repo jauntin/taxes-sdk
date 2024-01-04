@@ -16,7 +16,7 @@ class TaxesClient
     private const TIMEOUT = 5;
     private const TRIES = 3;
 
-    public function __construct(private readonly string $serviceUrl)
+    public function __construct(private readonly string $serviceUrl, private readonly string $cookieDomain)
     {
     }
 
@@ -86,10 +86,19 @@ class TaxesClient
      */
     private function prepareRequest(): PendingRequest
     {
-        return Http::asJson()
+        $request = Http::asJson()
             ->withHeaders(['Accept' => 'application/json'])
             ->timeout(self::TIMEOUT)
             ->retry(self::TRIES, self::SLEEP);
+
+        if ($currentAppDate = request()->cookie('current_app_date')) {
+            $request
+                ->withCookies([
+                    'current_app_date' => $currentAppDate
+                ], $this->cookieDomain);
+        }
+
+        return $request;
     }
 
     /**

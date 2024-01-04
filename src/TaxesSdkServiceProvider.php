@@ -26,7 +26,7 @@ class TaxesSdkServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'taxes-sdk');
 
-        $this->app->singleton(TaxesClient::class, fn() => new TaxesClient(config('taxes-sdk.api_uri')));
+        $this->app->singleton(TaxesClient::class, fn() => new TaxesClient(config('taxes-sdk.api_uri'), config('taxes-sdk.cookie_domain')));
 
         $this->app->singleton(CacheableTaxesClient::class, fn(Container $container) =>
             new CacheableTaxesClient($container->get(TaxesClient::class)));
