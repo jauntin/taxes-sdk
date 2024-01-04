@@ -7,5 +7,6 @@
     </testsuites>
     <php>
         <server name="TAXES_MICROSERVICE_URL" value="http://taxtestingserver"/>
+        <server name="TAXES_MICROSERVICE_COOKIE_DOMAIN" value="texes"/>
     </php>
 </phpunit>
