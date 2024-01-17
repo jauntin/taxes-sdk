@@ -89,7 +89,7 @@ class TaxesFacadeTest extends TestCase
         $calculated = TaxesFacade::taxes([TaxType::MUNICIPAL])
             ->state('KY')
             ->withMunicipal('0001')
-            ->setStartDate(Carbon::parse('2022-12-01'))
+            ->setEffectiveDate(Carbon::parse('2022-12-01'))
             ->calculate(10000);
 
         $this->assertInstanceOf(Calculated::class, $calculated);

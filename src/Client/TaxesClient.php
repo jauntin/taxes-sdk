@@ -66,16 +66,21 @@ class TaxesClient
     /**
      * @param string $state
      * @param string $search
+     * @param string|null $effectiveDate
      *
      * @return array
      *
      * @throws ClientException
      */
-    public function lookupTaxLocations(string $state, string $search): array
+    public function lookupTaxLocations(string $state, string $search, ?string $effectiveDate = null): array
     {
         $url      = sprintf('%s/api/v1/taxes/lookup/locations', $this->serviceUrl);
+        $params   = ['state' => $state, 'searchString' => $search];
+        if ($effectiveDate) {
+            $params['effectiveDate'] = $effectiveDate;
+        }
         $response = $this->handleRequest(
-            fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, ['state' => $state, 'searchString' => $search])
+            fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, $params)
         );
 
         return $response->json();

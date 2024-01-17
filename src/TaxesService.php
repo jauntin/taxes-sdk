@@ -20,7 +20,7 @@ class TaxesService
      */
     public function taxes(array $taxes): CalculateQuery
     {
-         return $this->newQuery()->taxes($taxes);
+        return $this->newQuery()->taxes($taxes);
     }
 
     /**
@@ -34,9 +34,9 @@ class TaxesService
     /**
      * @throws ClientException
      */
-    public function lookupTaxLocations(string $state, string $search): array
+    public function lookupTaxLocations(string $state, string $search, ?string $effectiveDate = null): array
     {
-        return $this->client->lookupTaxLocations($state, $search);
+        return $this->client->lookupTaxLocations($state, $search, $effectiveDate);
     }
 
     /**
