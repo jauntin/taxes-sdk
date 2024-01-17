@@ -89,13 +89,13 @@ class CalculateQuery
     }
 
     /**
-     * @param DateTime|string $startDate
+     * @param DateTime|string $effectiveDate
      *
      * @return $this
      */
-    public function setStartDate(DateTime|string $startDate): self
+    public function setEffectiveDate(DateTime|string $effectiveDate): self
     {
-        $this->params['startDate'] = $startDate instanceof DateTime ? $startDate->format('Y-m-d') : $startDate;
+        $this->params['effectiveDate'] = $effectiveDate instanceof DateTime ? $effectiveDate->format('Y-m-d') : $effectiveDate;
 
         return $this;
     }
@@ -129,7 +129,7 @@ class CalculateQuery
             'include.*'     => ['string'],
             'exclude'       => ['array'],
             'exclude.*'     => ['string'],
-            'startDate'     => ['date'],
+            'effectiveDate' => ['date'],
         ]);
     }
 }
