@@ -1,39 +1,31 @@
-name: run-tests
-
+name: Test
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
 jobs:
-  analyze:
-    runs-on: ubuntu-latest
+  Lint:
+    runs-on: arc-runner-set
+    container:
+      image: ghcr.io/jauntin/php-test-image:8.1
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: jauntin/actions/setup-php-testing@v1
-        with:
-          php-version: 8.1
-      - run: composer analyze
+      - uses: actions/checkout@v4
+      - run: composer install
+      - run: "parallel ::: 'vendor/bin/pint --test' 'vendor/bin/phpstan --no-interaction --no-ansi'"
   test:
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest]
-        php: [8.1]
-        laravel: [^9.0, ^10.0]
         stability: [prefer-lowest, prefer-stable]
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+        laravel: [^10.0]
+    runs-on: arc-runner-set
+    name: L${{ matrix.laravel }} - ${{ matrix.stability }}
+    container:
+      image: ghcr.io/jauntin/php-test-image:8.1
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: jauntin/actions/setup-php-testing@v1
-        with:
-          php-version: ${{ matrix.php }}
-      - name: Install dependencies
-        run: |
+      - uses: actions/checkout@v4
+      - run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
-      - name: Execute tests
-        run: vendor/bin/phpunit
+      - run: vendor/bin/phpunit --coverage-text

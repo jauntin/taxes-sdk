@@ -29,7 +29,7 @@ class CacheableTaxesClient
 
         $key = sprintf('taxes-sdk_%s_%s', $name, serialize($arguments));
 
-        return $this->wrapCache($key, fn() => $this->client->$name(...$arguments));
+        return $this->wrapCache($key, fn () => $this->client->$name(...$arguments));
     }
 
     /**

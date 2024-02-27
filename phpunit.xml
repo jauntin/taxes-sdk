@@ -8,4 +8,10 @@
     <php>
         <server name="TAXES_MICROSERVICE_URL" value="http://taxtestingserver"/>
     </php>
+    <coverage />
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </source>
 </phpunit>

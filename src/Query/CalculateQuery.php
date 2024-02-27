@@ -33,7 +33,7 @@ class CalculateQuery
      */
     public function taxes(array $taxes): self
     {
-        $this->params['taxTypes'] = array_map(fn(TaxType|string $t) => $t instanceof TaxType ? $t->value : $t, $taxes);
+        $this->params['taxTypes'] = array_map(fn (TaxType|string $t) => $t instanceof TaxType ? $t->value : $t, $taxes);
 
         return $this;
     }

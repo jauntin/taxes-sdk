@@ -27,7 +27,7 @@ class TaxesClient
     {
         $url      = sprintf('%s/api/v1/taxes/%s', $this->serviceUrl, $taxType->value);
         $response = $this->handleRequest(
-            fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
+            fn (PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
         );
 
         return $response->json();
@@ -40,7 +40,7 @@ class TaxesClient
     {
         $url      = sprintf('%s/api/v1/taxes/calculate', $this->serviceUrl);
         $response = $this->handleRequest(
-            fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
+            fn (PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
         );
 
         return $response->json();
@@ -57,7 +57,7 @@ class TaxesClient
     {
         $url      = sprintf('%s/api/v1/taxes/lookup', $this->serviceUrl);
         $response = $this->handleRequest(
-            fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, ['state' => $state])
+            fn (PendingRequest $pendingRequest) => $pendingRequest->get($url, ['state' => $state])
         );
 
         return $response->json('shouldLookupTax', false);
@@ -80,7 +80,7 @@ class TaxesClient
             $params['effectiveDate'] = $effectiveDate;
         }
         $response = $this->handleRequest(
-            fn(PendingRequest $pendingRequest) => $pendingRequest->get($url, $params)
+            fn (PendingRequest $pendingRequest) => $pendingRequest->get($url, $params)
         );
 
         return $response->json();
@@ -103,7 +103,7 @@ class TaxesClient
      */
     private function prepareQuery(array $query): array
     {
-        return array_filter($query, fn($a) => isset($a));
+        return array_filter($query, fn ($a) => isset($a));
     }
 
     /**
