@@ -17,7 +17,6 @@ trait TestCases
                     'amount'        => 61900,
                     'municipalCode' => '0124'
                 ],
-                'surchargeAmount' => 6066,
             ],
             'kentuckyOnlyMunicipal' => [
                 'input'           => [
@@ -26,7 +25,6 @@ trait TestCases
                     'amount'        => 62400,
                     'municipalCode' => '0124'
                 ],
-                'surchargeAmount' => 3120,
             ],
             'kentuckyEntity'        => [
                 'input'           => [
@@ -34,7 +32,6 @@ trait TestCases
                     'state'    => 'KY',
                     'amount'   => 63100,
                 ],
-                'surchargeAmount' => 3029,
             ],
             'newYork'               => [
                 'input'           => [
@@ -42,7 +39,6 @@ trait TestCases
                     'state'    => 'NY',
                     'amount'   => 60100,
                 ],
-                'surchargeAmount' => 2254,
             ],
             'newYork2'              => [
                 'input'           => [
@@ -50,7 +46,6 @@ trait TestCases
                     'state'    => 'NY',
                     'amount'   => 41800,
                 ],
-                'surchargeAmount' => 1568,
             ],
             'testCase1'             => [
                 'input'           => [
@@ -58,14 +53,13 @@ trait TestCases
                     'state'    => 'NV',
                     'amount'   => 101200,
                 ],
-                'surchargeAmount' => 3947,
             ],
             'testCase2'             => [
                 'input'           => [
                     'taxTypes' => ['surplus'],
                     'state'    => 'NJ',
-                    'amount'   => 115300],
-                'surchargeAmount' => 5765,
+                    'amount'   => 115300
+                ],
             ],
             'testCase3'             => [
                 'input'           => [
@@ -73,7 +67,6 @@ trait TestCases
                     'state'    => 'NY',
                     'amount'   => 58200,
                 ],
-                'surchargeAmount' => 2182,
             ],
             'testCase4'             => [
                 'input'           => [
@@ -81,7 +74,6 @@ trait TestCases
                     'state'    => 'FL',
                     'amount'   => 42500,
                 ],
-                'surchargeAmount' => 2126,
             ],
             'testCase5'             => [
                 'input'           => [
@@ -89,7 +81,6 @@ trait TestCases
                     'state'    => 'FL',
                     'amount'   => 47000,
                 ],
-                'surchargeAmount' => 2350,
             ],
             'testCase6'             => [
                 'input'           => [
@@ -98,7 +89,6 @@ trait TestCases
                     'amount'        => 64900,
                     'municipalCode' => '0124',
                 ],
-                'surchargeAmount' => 6360,
             ],
             'testCase7'             => [
                 'input'           => [
@@ -107,7 +97,6 @@ trait TestCases
                     'amount'        => 64900,
                     'startDate'     => '2023-01-01',
                 ],
-                'surchargeAmount' => 0,
             ],
         ];
     }

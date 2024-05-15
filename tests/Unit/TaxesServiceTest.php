@@ -28,7 +28,7 @@ class TaxesServiceTest extends TestCase
     /**
      * @dataProvider pricingTestCaseProvider
      */
-    public function testTaxes(array $input, int $preSurcharge)
+    public function testTaxes(array $input)
     {
         $query = $this->service->taxes($input['taxTypes'])->state($input['state']);
         if (isset($input['municipalCode'])) {
