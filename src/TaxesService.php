@@ -13,11 +13,6 @@ class TaxesService
     {
     }
 
-    /**
-     * @param array $taxes
-     *
-     * @return CalculateQuery
-     */
     public function taxes(array $taxes): CalculateQuery
     {
         return $this->newQuery()->taxes($taxes);
@@ -47,9 +42,6 @@ class TaxesService
         return $this->client->getTaxes($params, $taxType);
     }
 
-    /**
-     * @return CalculateQuery
-     */
     private function newQuery(): CalculateQuery
     {
         return $this->queryFactory->make($this->client);

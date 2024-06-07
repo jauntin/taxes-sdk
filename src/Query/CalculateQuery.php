@@ -18,17 +18,12 @@ class CalculateQuery
         'taxTypes' => [],
     ];
 
-    /**
-     * @param CacheableTaxesClient $client
-     * @param Factory $validator
-     */
     public function __construct(private readonly CacheableTaxesClient $client, private readonly Factory $validator)
     {
     }
 
     /**
-     * @param array<int, TaxType|string> $taxes
-     *
+     * @param  array<int, TaxType|string>  $taxes
      * @return $this
      */
     public function taxes(array $taxes): self
@@ -39,8 +34,6 @@ class CalculateQuery
     }
 
     /**
-     * @param string $state
-     *
      * @return $this
      */
     public function state(string $state): self
@@ -51,8 +44,7 @@ class CalculateQuery
     }
 
     /**
-     * @param array|string[] $codes
-     *
+     * @param  array|string[]  $codes
      * @return $this
      */
     public function include(array $codes): self
@@ -63,8 +55,7 @@ class CalculateQuery
     }
 
     /**
-     * @param array|string[] $codes
-     *
+     * @param  array|string[]  $codes
      * @return $this
      */
     public function exclude(array $codes): self
@@ -75,8 +66,6 @@ class CalculateQuery
     }
 
     /**
-     * @param string $municipalCode
-     *
      * @return $this
      */
     public function withMunicipal(string $municipalCode): self
@@ -89,8 +78,6 @@ class CalculateQuery
     }
 
     /**
-     * @param DateTime|string $effectiveDate
-     *
      * @return $this
      */
     public function setEffectiveDate(DateTime|string $effectiveDate): self
@@ -120,15 +107,15 @@ class CalculateQuery
         $requiredWithMunicipal = Rule::requiredIf(in_array(TaxType::MUNICIPAL->value, $this->params['taxTypes']));
 
         $this->validator->validate($this->params, [
-            'taxTypes'      => ['required', 'array', 'min:1'],
-            'taxTypes.*'    => ['required', Rule::in(TaxType::types())],
-            'state'         => ['required', 'string'],
-            'amount'        => ['required', 'int', 'min:1'],
+            'taxTypes' => ['required', 'array', 'min:1'],
+            'taxTypes.*' => ['required', Rule::in(TaxType::types())],
+            'state' => ['required', 'string'],
+            'amount' => ['required', 'int', 'min:1'],
             'municipalCode' => [$requiredWithMunicipal, 'string'],
-            'include'       => ['array'],
-            'include.*'     => ['string'],
-            'exclude'       => ['array'],
-            'exclude.*'     => ['string'],
+            'include' => ['array'],
+            'include.*' => ['string'],
+            'exclude' => ['array'],
+            'exclude.*' => ['string'],
             'effectiveDate' => ['date'],
         ]);
     }

@@ -13,7 +13,9 @@ use Jauntin\TaxesSdk\TaxType;
 class TaxesClient
 {
     private const SLEEP = 1000;
+
     private const TIMEOUT = 5;
+
     private const TRIES = 3;
 
     public function __construct(private readonly string $serviceUrl)
@@ -25,7 +27,7 @@ class TaxesClient
      */
     public function getTaxes(array $params, TaxType $taxType): array
     {
-        $url      = sprintf('%s/api/v1/taxes/%s', $this->serviceUrl, $taxType->value);
+        $url = sprintf('%s/api/v1/taxes/%s', $this->serviceUrl, $taxType->value);
         $response = $this->handleRequest(
             fn (PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
         );
@@ -38,7 +40,7 @@ class TaxesClient
      */
     public function calculateTaxes(array $params): array
     {
-        $url      = sprintf('%s/api/v1/taxes/calculate', $this->serviceUrl);
+        $url = sprintf('%s/api/v1/taxes/calculate', $this->serviceUrl);
         $response = $this->handleRequest(
             fn (PendingRequest $pendingRequest) => $pendingRequest->get($url, $this->prepareQuery($params))
         );
@@ -47,15 +49,11 @@ class TaxesClient
     }
 
     /**
-     * @param string $state
-     *
-     * @return bool
-     *
      * @throws ClientException
      */
     public function shouldLookup(string $state): bool
     {
-        $url      = sprintf('%s/api/v1/taxes/lookup', $this->serviceUrl);
+        $url = sprintf('%s/api/v1/taxes/lookup', $this->serviceUrl);
         $response = $this->handleRequest(
             fn (PendingRequest $pendingRequest) => $pendingRequest->get($url, ['state' => $state])
         );
@@ -64,18 +62,12 @@ class TaxesClient
     }
 
     /**
-     * @param string $state
-     * @param string $search
-     * @param string|null $effectiveDate
-     *
-     * @return array
-     *
      * @throws ClientException
      */
     public function lookupTaxLocations(string $state, string $search, ?string $effectiveDate = null): array
     {
-        $url      = sprintf('%s/api/v1/taxes/lookup/locations', $this->serviceUrl);
-        $params   = ['state' => $state, 'searchString' => $search];
+        $url = sprintf('%s/api/v1/taxes/lookup/locations', $this->serviceUrl);
+        $params = ['state' => $state, 'searchString' => $search];
         if ($effectiveDate) {
             $params['effectiveDate'] = $effectiveDate;
         }
@@ -86,9 +78,6 @@ class TaxesClient
         return $response->json();
     }
 
-    /**
-     * @return PendingRequest
-     */
     private function prepareRequest(): PendingRequest
     {
         return Http::asJson()
@@ -98,7 +87,6 @@ class TaxesClient
     }
 
     /**
-     * @param array $query
      * @return int[]|null[]|string[]
      */
     private function prepareQuery(array $query): array
@@ -107,10 +95,6 @@ class TaxesClient
     }
 
     /**
-     * @param Closure $handler
-     *
-     * @return Response
-     *
      * @throws ClientException
      */
     private function handleRequest(Closure $handler): Response
