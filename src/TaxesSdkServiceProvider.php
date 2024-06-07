@@ -14,7 +14,7 @@ class TaxesSdkServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('taxes-sdk.php'),
+                __DIR__.'/../config/config.php' => config_path('taxes-sdk.php'),
             ], 'config');
         }
     }
@@ -24,14 +24,12 @@ class TaxesSdkServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'taxes-sdk');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'taxes-sdk');
 
         $this->app->singleton(TaxesClient::class, fn () => new TaxesClient(config('taxes-sdk.api_uri')));
 
-        $this->app->singleton(CacheableTaxesClient::class, fn (Container $container) =>
-            new CacheableTaxesClient($container->get(TaxesClient::class)));
+        $this->app->singleton(CacheableTaxesClient::class, fn (Container $container) => new CacheableTaxesClient($container->get(TaxesClient::class)));
 
-        $this->app->singleton(TaxesService::class, fn (Container $container) =>
-            new TaxesService($container->get(CacheableTaxesClient::class), $container->get(QueryFactory::class)));
+        $this->app->singleton(TaxesService::class, fn (Container $container) => new TaxesService($container->get(CacheableTaxesClient::class), $container->get(QueryFactory::class)));
     }
 }

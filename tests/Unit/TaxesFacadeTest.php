@@ -14,8 +14,8 @@ use Orchestra\Testbench\TestCase;
 
 class TaxesFacadeTest extends TestCase
 {
-    use TestCases;
     use Mockable;
+    use TestCases;
 
     protected function setUp(): void
     {
@@ -68,20 +68,20 @@ class TaxesFacadeTest extends TestCase
         TaxesFacade::shouldReceive('taxes')->once()->andReturn($this->mockQuery([
             'taxes' => [
                 [
-                    'state'         => 'KY',
-                    'type'          => 'AdChrg',
-                    'code'          => 'AFKY1',
-                    'rate'          => 0.05,
+                    'state' => 'KY',
+                    'type' => 'AdChrg',
+                    'code' => 'AFKY1',
+                    'rate' => 0.05,
                     'municipalCode' => '0001',
                     'municipalName' => 'LOUISVILLE - JEFFERSON',
-                    'amount'        => [
-                        'amount'   => 500,
+                    'amount' => [
+                        'amount' => 500,
                         'currency' => 'USD',
                     ],
                 ],
             ],
             'total' => [
-                'amount'   => 500,
+                'amount' => 500,
                 'currency' => 'USD',
             ],
         ]));

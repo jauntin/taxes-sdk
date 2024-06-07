@@ -27,12 +27,12 @@ class CacheableTaxesClientTest extends TestCase
         Cache::shouldReceive('driver')->once()->andReturnSelf();
         Cache::shouldReceive('remember')->once()->andReturn([
             [
-                'state'         => 'KY',
-                'type'          => 'AdChrg',
-                'code'          => 'AFKY1',
-                'rate'          => 0.05,
+                'state' => 'KY',
+                'type' => 'AdChrg',
+                'code' => 'AFKY1',
+                'rate' => 0.05,
                 'municipalCode' => '0001',
-                'municipalName' => 'LOUISVILLE - JEFFERSON'
+                'municipalName' => 'LOUISVILLE - JEFFERSON',
             ],
         ]);
         $result = $this->decorator->getTaxes(['state' => 'KY', 'municipalCode' => '0001', 'taxTypes' => ['municipal']]);
@@ -45,20 +45,20 @@ class CacheableTaxesClientTest extends TestCase
         Cache::shouldReceive('remember')->once()->andReturn([
             'taxes' => [
                 [
-                    'state'         => 'KY',
-                    'type'          => 'AdChrg',
-                    'code'          => 'AFKY1',
-                    'rate'          => 0.05,
+                    'state' => 'KY',
+                    'type' => 'AdChrg',
+                    'code' => 'AFKY1',
+                    'rate' => 0.05,
                     'municipalCode' => '0001',
                     'municipalName' => 'LOUISVILLE - JEFFERSON',
-                    'amount'        => [
-                        'amount'   => 500,
+                    'amount' => [
+                        'amount' => 500,
                         'currency' => 'USD',
                     ],
                 ],
             ],
             'total' => [
-                'amount'   => 500,
+                'amount' => 500,
                 'currency' => 'USD',
             ],
         ]);
@@ -84,37 +84,37 @@ class CacheableTaxesClientTest extends TestCase
         Cache::shouldReceive('driver')->once()->andReturnSelf();
         Cache::shouldReceive('remember')->once()->andReturn([
             [
-                "state" => "KY",
-                "type" => "AdChrg",
-                "code" => "AFKY1",
-                "rate" => 0.05,
-                "municipalCode" => "0905",
-                "municipalName" => "JEFFERSON COUNTY"
+                'state' => 'KY',
+                'type' => 'AdChrg',
+                'code' => 'AFKY1',
+                'rate' => 0.05,
+                'municipalCode' => '0905',
+                'municipalName' => 'JEFFERSON COUNTY',
             ],
             [
-                "state" => "KY",
-                "type" => "AdChrg",
-                "code" => "AFKY1",
-                "rate" => 0.05,
-                "municipalCode" => "0072",
-                "municipalName" => "JEFFERSONTOWN"
+                'state' => 'KY',
+                'type' => 'AdChrg',
+                'code' => 'AFKY1',
+                'rate' => 0.05,
+                'municipalCode' => '0072',
+                'municipalName' => 'JEFFERSONTOWN',
             ],
             [
-                "state" => "KY",
-                "type" => "AdChrg",
-                "code" => "AFKY1",
-                "rate" => 0.05,
-                "municipalCode" => "0001",
-                "municipalName" => "LOUISVILLE - JEFFERSON"
+                'state' => 'KY',
+                'type' => 'AdChrg',
+                'code' => 'AFKY1',
+                'rate' => 0.05,
+                'municipalCode' => '0001',
+                'municipalName' => 'LOUISVILLE - JEFFERSON',
             ],
             [
-                "state" => "KY",
-                "type" => "AdChrg",
-                "code" => "AFKY1",
-                "rate" => 0,
-                "municipalCode" => "0439",
-                "municipalName" => "JEFFERSONVILLE"
-            ]
+                'state' => 'KY',
+                'type' => 'AdChrg',
+                'code' => 'AFKY1',
+                'rate' => 0,
+                'municipalCode' => '0439',
+                'municipalName' => 'JEFFERSONVILLE',
+            ],
         ]);
 
         $result = $this->decorator->lookupTaxLocations('KY', 'jefferson');

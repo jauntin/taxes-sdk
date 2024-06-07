@@ -10,8 +10,8 @@ use Orchestra\Testbench\TestCase;
 
 class TaxesClientTest extends TestCase
 {
-    use TestCases;
     use Mockable;
+    use TestCases;
 
     private TaxesClient $client;
 
