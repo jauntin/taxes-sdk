@@ -2,8 +2,12 @@ name: Test
 on:
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        default: ${{ github.ref }}
 jobs:
   Lint:
     runs-on: arc-runner-set
@@ -11,6 +15,8 @@ jobs:
       image: ghcr.io/jauntin/php-test-image:8.1
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
       - run: composer install
       - run: "parallel ::: 'vendor/bin/pint --test' 'vendor/bin/phpstan --no-interaction --no-ansi'"
   test:
@@ -25,6 +31,8 @@ jobs:
       image: ghcr.io/jauntin/php-test-image:8.1
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
       - run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
