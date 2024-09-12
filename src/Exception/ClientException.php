@@ -2,6 +2,4 @@
 
 namespace Jauntin\TaxesSdk\Exception;
 
-class ClientException extends Exception
-{
-}
+class ClientException extends Exception {}

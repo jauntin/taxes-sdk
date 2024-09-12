@@ -9,9 +9,7 @@ use Jauntin\TaxesSdk\Query\QueryFactory;
 
 class TaxesService
 {
-    public function __construct(private readonly CacheableTaxesClient $client, private readonly QueryFactory $queryFactory)
-    {
-    }
+    public function __construct(private readonly CacheableTaxesClient $client, private readonly QueryFactory $queryFactory) {}
 
     public function taxes(array $taxes): CalculateQuery
     {

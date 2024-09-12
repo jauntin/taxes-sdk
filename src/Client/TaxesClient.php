@@ -18,9 +18,7 @@ class TaxesClient
 
     private const TRIES = 3;
 
-    public function __construct(private readonly string $serviceUrl)
-    {
-    }
+    public function __construct(private readonly string $serviceUrl) {}
 
     /**
      * @throws ClientException

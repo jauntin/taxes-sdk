@@ -18,9 +18,7 @@ class CalculateQuery
         'taxTypes' => [],
     ];
 
-    public function __construct(private readonly CacheableTaxesClient $client, private readonly Factory $validator)
-    {
-    }
+    public function __construct(private readonly CacheableTaxesClient $client, private readonly Factory $validator) {}
 
     /**
      * @param  array<int, TaxType|string>  $taxes

@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Cache;
  */
 class CacheableTaxesClient
 {
-    public function __construct(private readonly TaxesClient $client)
-    {
-    }
+    public function __construct(private readonly TaxesClient $client) {}
 
     /**
      * @return mixed
