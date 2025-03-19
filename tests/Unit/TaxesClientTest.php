@@ -7,6 +7,7 @@ use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
 use Jauntin\TaxesSdk\Tests\Mockable;
 use Jauntin\TaxesSdk\Tests\TestCases;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TaxesClientTest extends TestCase
 {
@@ -23,10 +24,8 @@ class TaxesClientTest extends TestCase
         $this->client = $this->app->get(TaxesClient::class);
     }
 
-    /**
-     * @dataProvider pricingTestCaseProvider
-     */
-    public function testCalculateMany(array $input)
+    #[DataProvider('pricingTestCaseProvider')]
+    public function test_calculate_many(array $input)
     {
         $calculated = $this->client->calculateTaxes($input);
         $this->assertArrayHasKey('taxes', $calculated);
