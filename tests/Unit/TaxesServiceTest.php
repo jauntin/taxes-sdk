@@ -9,6 +9,7 @@ use Jauntin\TaxesSdk\Tests\Mockable;
 use Jauntin\TaxesSdk\Tests\TestCases;
 use Money\Money;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TaxesServiceTest extends TestCase
 {
@@ -25,10 +26,8 @@ class TaxesServiceTest extends TestCase
         $this->service = $this->app->make(TaxesService::class);
     }
 
-    /**
-     * @dataProvider pricingTestCaseProvider
-     */
-    public function testTaxes(array $input)
+    #[DataProvider('pricingTestCaseProvider')]
+    public function test_taxes(array $input)
     {
         $query = $this->service->taxes($input['taxTypes'])->state($input['state']);
         if (isset($input['municipalCode'])) {
@@ -40,7 +39,7 @@ class TaxesServiceTest extends TestCase
         $this->assertInstanceOf(Money::class, $result->getTotal());
     }
 
-    public function testAtLeastOneTaxTypeIsRequired()
+    public function test_at_least_one_tax_type_is_required()
     {
         $this->expectException(ValidationException::class);
         try {
@@ -52,7 +51,7 @@ class TaxesServiceTest extends TestCase
         }
     }
 
-    public function testStateIsRequired()
+    public function test_state_is_required()
     {
         $this->expectException(ValidationException::class);
         try {
@@ -64,7 +63,7 @@ class TaxesServiceTest extends TestCase
         }
     }
 
-    public function testMunicipalCodeIsRequiredWithMunicipalTaxType()
+    public function test_municipal_code_is_required_with_municipal_tax_type()
     {
         $this->expectException(ValidationException::class);
         try {
@@ -75,13 +74,13 @@ class TaxesServiceTest extends TestCase
         }
     }
 
-    public function testShouldLookup()
+    public function test_should_lookup()
     {
         $this->assertTrue($this->service->shouldLookup('KY'));
         $this->assertFalse($this->service->shouldLookup('NY'));
     }
 
-    public function testLookupTaxLocations()
+    public function test_lookup_tax_locations()
     {
         $locations = $this->service->lookupTaxLocations('KY', 'jefferson');
         $this->assertIsArray($locations);

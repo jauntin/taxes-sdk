@@ -22,7 +22,7 @@ class CacheableTaxesClientTest extends TestCase
         $this->decorator = $this->app->get(CacheableTaxesClient::class);
     }
 
-    public function testGetTaxesFromCache()
+    public function test_get_taxes_from_cache()
     {
         Cache::shouldReceive('driver')->once()->andReturnSelf();
         Cache::shouldReceive('remember')->once()->andReturn([
@@ -39,7 +39,7 @@ class CacheableTaxesClientTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testCalculateTaxesFromCache()
+    public function test_calculate_taxes_from_cache()
     {
         Cache::shouldReceive('driver')->once()->andReturnSelf();
         Cache::shouldReceive('remember')->once()->andReturn([
@@ -69,7 +69,7 @@ class CacheableTaxesClientTest extends TestCase
         $this->assertCount(1, $result['taxes']);
     }
 
-    public function testShouldLookupFromCache()
+    public function test_should_lookup_from_cache()
     {
         Cache::shouldReceive('driver')->once()->andReturnSelf();
         Cache::shouldReceive('remember')->once()->andReturn(true);
@@ -79,7 +79,7 @@ class CacheableTaxesClientTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testLookupTaxLocationsFromCache()
+    public function test_lookup_tax_locations_from_cache()
     {
         Cache::shouldReceive('driver')->once()->andReturnSelf();
         Cache::shouldReceive('remember')->once()->andReturn([
@@ -122,7 +122,7 @@ class CacheableTaxesClientTest extends TestCase
         $this->assertCount(4, $result);
     }
 
-    public function testNoCacheWithoutTtl()
+    public function test_no_cache_without_ttl()
     {
         $this->mockClient();
 

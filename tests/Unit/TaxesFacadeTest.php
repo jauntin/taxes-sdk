@@ -11,6 +11,7 @@ use Jauntin\TaxesSdk\Tests\Mockable;
 use Jauntin\TaxesSdk\Tests\TestCases;
 use Money\Money;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TaxesFacadeTest extends TestCase
 {
@@ -23,10 +24,8 @@ class TaxesFacadeTest extends TestCase
         $this->mockClient();
     }
 
-    /**
-     * @dataProvider pricingTestCaseProvider
-     */
-    public function testTaxes(array $input)
+    #[DataProvider('pricingTestCaseProvider')]
+    public function test_taxes(array $input)
     {
         $query = TaxesFacade::taxes($input['taxTypes'])->state($input['state']);
         if (isset($input['municipalCode'])) {
@@ -38,13 +37,13 @@ class TaxesFacadeTest extends TestCase
         $this->assertInstanceOf(Money::class, $result->getTotal());
     }
 
-    public function testShouldLookup()
+    public function test_should_lookup()
     {
         $this->assertTrue(TaxesFacade::shouldLookup('KY'));
         $this->assertFalse(TaxesFacade::shouldLookup('NY'));
     }
 
-    public function testLookupTaxLocations()
+    public function test_lookup_tax_locations()
     {
         $locations = TaxesFacade::lookupTaxLocations('KY', 'jefferson');
         $this->assertIsArray($locations);
@@ -55,7 +54,7 @@ class TaxesFacadeTest extends TestCase
         $this->assertEmpty($locations);
     }
 
-    public function testMockSelf()
+    public function test_mock_self()
     {
         TaxesFacade::shouldReceive('shouldLookup')->once()->andReturn(false);
         TaxesFacade::shouldReceive('lookupTaxLocations')->once()->andReturn([]);
@@ -63,7 +62,7 @@ class TaxesFacadeTest extends TestCase
         $this->assertEmpty(TaxesFacade::lookupTaxLocations('NY', 'brooklyn'));
     }
 
-    public function testMockCalculateQuery()
+    public function test_mock_calculate_query()
     {
         TaxesFacade::shouldReceive('taxes')->once()->andReturn($this->mockQuery([
             'taxes' => [
