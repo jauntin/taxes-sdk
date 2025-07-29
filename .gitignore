@@ -5,3 +5,4 @@
 .idea
 /composer.lock
 .pint.cache
+semicolon_delimited_script
