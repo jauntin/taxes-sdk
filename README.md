@@ -1,4 +1,7 @@
 # Taxes SDK
+
+SDK for integrating with Jauntin's Taxes microservice.
+
 ### Installation
 1. Add SDK repository to `composer.json`
 ```json
@@ -19,7 +22,16 @@
 
 `php artisan vendor:publish --provider="Jauntin\\TaxesSdk\\TaxesSdkServiceProvider" --tag="config"`
 
-### Examples
+4. Set the microservice URL in `.env`
+
+```dotenv
+TAXES_MICROSERVICE_URL=https://taxes.example.com
+```
+
+## v1 API — Tax calculation & municipal lookup
+
+Exposed via the `TaxesFacade` facade (`Jauntin\TaxesSdk\TaxesFacade`).
+
 #### Tax model
 ```php
 [
@@ -43,7 +55,7 @@
 
 require_once('../vendor/autoload.php');
 
-use Jauntin\TaxesSdk\TaxesFacace;
+use Jauntin\TaxesSdk\TaxesFacade;
 
 $calculated = TaxesFacade::taxes(['surplus'])
     ->state('NY')
@@ -60,7 +72,7 @@ var_dump($calculated->getTaxes()); // array
 
 require_once('../vendor/autoload.php');
 
-use Jauntin\TaxesSdk\TaxesFacace;
+use Jauntin\TaxesSdk\TaxesFacade;
 
 $calculated = TaxesFacade::taxes(['surplus', 'municipal'])
     ->state('KY')
@@ -78,7 +90,7 @@ var_dump($calculated->getTaxes()); // array
 
 require_once('../vendor/autoload.php');
 
-use Jauntin\TaxesSdk\TaxesFacace;
+use Jauntin\TaxesSdk\TaxesFacade;
 
 $calculated = TaxesFacade::taxes(['admitted', 'municipal'])
     ->state('KY')
@@ -95,7 +107,7 @@ var_dump($calculated->getTaxes()); // array
 
 require_once('../vendor/autoload.php');
 
-use Jauntin\TaxesSdk\TaxesFacace;
+use Jauntin\TaxesSdk\TaxesFacade;
 
 $shouldLookupKY = TaxesFacade::shouldLookup('KY');
 $shouldLookupNY = TaxesFacade::shouldLookup('NY');
@@ -110,7 +122,7 @@ var_dump($shouldLookupNY); // false
 
 require_once('../vendor/autoload.php');
 
-use Jauntin\TaxesSdk\TaxesFacace;
+use Jauntin\TaxesSdk\TaxesFacade;
 
 $locationsKY = TaxesFacade::lookupTaxLocations('KY', 'jefferson');
 // example list
@@ -125,4 +137,109 @@ $locationsKY = TaxesFacade::lookupTaxLocations('KY', 'jefferson');
     ],
     ...
 ]
+```
+
+## v2 API — Kentucky LGPT jurisdiction lookup
+
+Resolves the Kentucky Local Government Premium Tax (LGPT) jurisdiction for a
+location. Exposed via the `TaxesFacadeV2` facade
+(`Jauntin\TaxesSdk\TaxesFacadeV2`), backed by `/api/v2/ky/lgpt/lookup`.
+
+A lookup accepts any one of: a street `address`, `lat` + `lng`, a `city`
+(optionally narrowed by `county`), or a Google `place_id`. Pass `debug = true`
+to include the resolution steps in the response.
+
+#### Response shape
+```php
+[
+    'lookup_mode' => 'place_lookup',
+    'matches'     => [
+        [
+            'rank'         => 1,
+            'match_type'   => 'rate_table_name',
+            'confidence'   => 'medium',
+            'jurisdiction' => [
+                'canonical_key' => 'ADAIRVILLE',
+                'name'          => 'Adairville',
+                'rates'         => [
+                    'fire_allied_perils' => 0.10,
+                    'casualty_liability' => 0.05,
+                    'automobile'         => 0.05,
+                    'inland_marine'      => 0.10,
+                    // ...
+                ],
+                // ...
+            ],
+        ],
+    ],
+    'warnings'    => [],
+]
+```
+
+#### Lookup by street address
+```php
+<?php
+
+require_once('../vendor/autoload.php');
+
+use Jauntin\TaxesSdk\TaxesFacadeV2;
+
+$result = TaxesFacadeV2::lookupByAddress('123 Main St, Adairville, KY 42202');
+
+var_dump($result['matches'][0]['jurisdiction']['canonical_key']); // string
+```
+
+#### Lookup by latitude / longitude
+```php
+<?php
+
+require_once('../vendor/autoload.php');
+
+use Jauntin\TaxesSdk\TaxesFacadeV2;
+
+$result = TaxesFacadeV2::lookupByLatLng(36.67, -87.05);
+
+var_dump($result['lookup_mode']); // "latlng_point_lookup"
+```
+
+#### Lookup by city (optionally narrowed by county)
+```php
+<?php
+
+require_once('../vendor/autoload.php');
+
+use Jauntin\TaxesSdk\TaxesFacadeV2;
+
+$result = TaxesFacadeV2::lookupByCity('Adairville', 'Logan');
+
+var_dump($result['matches']); // array
+```
+
+#### Lookup by Google place_id
+```php
+<?php
+
+require_once('../vendor/autoload.php');
+
+use Jauntin\TaxesSdk\TaxesFacadeV2;
+
+$result = TaxesFacadeV2::lookupByPlaceId('ChIJ...');
+
+var_dump($result['matches']); // array
+```
+
+#### Raw lookup with arbitrary parameters
+```php
+<?php
+
+require_once('../vendor/autoload.php');
+
+use Jauntin\TaxesSdk\TaxesFacadeV2;
+
+$result = TaxesFacadeV2::jurisdictionLookup([
+    'city'  => 'Adairville',
+    'debug' => true,
+]);
+
+var_dump($result['lookup_mode']); // string
 ```

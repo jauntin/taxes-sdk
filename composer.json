@@ -51,7 +51,8 @@
                 "Jauntin\\TaxesSdk\\TaxesSdkServiceProvider"
             ],
             "aliases": {
-                "TaxesFacade": "Jauntin\\TaxesSdk\\TaxesFacade"
+                "TaxesFacade": "Jauntin\\TaxesSdk\\TaxesFacade",
+                "TaxesFacadeV2": "Jauntin\\TaxesSdk\\TaxesFacadeV2"
             }
         }
     }
