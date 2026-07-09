@@ -2,24 +2,12 @@
 
 namespace Jauntin\TaxesSdk\Client;
 
-use Closure;
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
 use Jauntin\TaxesSdk\Exception\ClientException;
 use Jauntin\TaxesSdk\TaxType;
 
-class TaxesClient
+class TaxesClient extends AbstractTaxesClient
 {
-    private const SLEEP = 1000;
-
-    private const TIMEOUT = 5;
-
-    private const TRIES = 3;
-
-    public function __construct(private readonly string $serviceUrl) {}
-
     /**
      * @throws ClientException
      */
@@ -74,40 +62,5 @@ class TaxesClient
         );
 
         return $response->json();
-    }
-
-    private function prepareRequest(): PendingRequest
-    {
-        return Http::asJson()
-            ->withHeaders(['Accept' => 'application/json'])
-            ->timeout(self::TIMEOUT)
-            ->retry(self::TRIES, self::SLEEP);
-    }
-
-    /**
-     * @return int[]|null[]|string[]
-     */
-    private function prepareQuery(array $query): array
-    {
-        return array_filter($query, fn ($a) => isset($a));
-    }
-
-    /**
-     * @throws ClientException
-     */
-    private function handleRequest(Closure $handler): Response
-    {
-        try {
-            /** @var Response $response */
-            $response = $handler($this->prepareRequest());
-        } catch (RequestException $e) {
-            $response = $e->response;
-        }
-
-        if ($response->successful()) {
-            return $response;
-        }
-
-        throw new ClientException($response->body(), $response->status(), $response->toException());
     }
 }

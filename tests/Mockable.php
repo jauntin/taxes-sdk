@@ -93,6 +93,33 @@ trait Mockable
                     'shouldLookupTax' => $state === 'KY',
                 ]));
             },
+            Config::get('taxes-sdk.api_uri').'/api/v2/ky/lgpt/lookup*' => function (Request $request) {
+                parse_str((string) parse_url($request->url(), PHP_URL_QUERY), $query);
+
+                $mode = match (true) {
+                    isset($query['address']) => 'address_lookup',
+                    isset($query['lat'], $query['lng']) => 'latlng_point_lookup',
+                    isset($query['place_id']) => 'placeid_lookup',
+                    default => 'place_lookup',
+                };
+                $canonicalKey = strtoupper($query['city'] ?? $query['address'] ?? 'ADAIRVILLE');
+
+                return Http::response(json_encode([
+                    'lookup_mode' => $mode,
+                    'input' => $query,
+                    'matches' => [
+                        [
+                            'rank' => 1,
+                            'match_type' => 'rate_table_name',
+                            'confidence' => 'medium',
+                            'jurisdiction' => [
+                                'canonical_key' => $canonicalKey,
+                                'rates' => ['fire_allied_perils' => 0.1],
+                            ],
+                        ],
+                    ],
+                ]));
+            },
         ]);
     }
 
