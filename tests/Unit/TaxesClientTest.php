@@ -2,6 +2,7 @@
 
 namespace Jauntin\TaxesSdk\Tests\Unit;
 
+use Illuminate\Support\Facades\Http;
 use Jauntin\TaxesSdk\Client\TaxesClient;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
 use Jauntin\TaxesSdk\Tests\Mockable;
@@ -33,6 +34,13 @@ class TaxesClientTest extends TestCase
         $this->assertArrayHasKey('amount', $calculated['taxes'][0]);
         $this->assertIsInt($calculated['taxes'][0]['amount']['amount']);
         $this->assertIsInt($calculated['total']['amount']);
+    }
+
+    public function test_requests_are_sent_with_bearer_token()
+    {
+        $this->client->shouldLookup('KY');
+
+        Http::assertSent(fn ($request) => $request->hasHeader('Authorization', 'Bearer test-token'));
     }
 
     protected function getPackageProviders($app): array

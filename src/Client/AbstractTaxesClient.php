@@ -17,12 +17,13 @@ abstract class AbstractTaxesClient
 
     private const TRIES = 3;
 
-    public function __construct(protected readonly string $serviceUrl) {}
+    public function __construct(protected readonly string $serviceUrl, protected readonly ?string $token = null) {}
 
     protected function prepareRequest(): PendingRequest
     {
         return Http::asJson()
             ->withHeaders(['Accept' => 'application/json'])
+            ->withToken((string) $this->token)
             ->timeout(self::TIMEOUT)
             ->retry(self::TRIES, self::SLEEP);
     }
