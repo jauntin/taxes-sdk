@@ -22,11 +22,16 @@ SDK for integrating with Jauntin's Taxes microservice.
 
 `php artisan vendor:publish --provider="Jauntin\\TaxesSdk\\TaxesSdkServiceProvider" --tag="config"`
 
-4. Set the microservice URL in `.env`
+4. Set the microservice URL and API token in `.env`
 
 ```dotenv
 TAXES_MICROSERVICE_URL=https://taxes.example.com
+TAXES_MICROSERVICE_TOKEN=your-bearer-token
 ```
+
+The token is issued by the microservice per consuming service (see its
+`api-clients:create` command) and sent as `Authorization: Bearer <token>` on
+every request.
 
 ## v1 API — Tax calculation & municipal lookup
 
