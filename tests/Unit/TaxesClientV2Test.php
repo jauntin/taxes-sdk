@@ -2,6 +2,7 @@
 
 namespace Jauntin\TaxesSdk\Tests\Unit;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Jauntin\TaxesSdk\Client\TaxesClientV2;
 use Jauntin\TaxesSdk\TaxesSdkServiceProvider;
@@ -51,6 +52,16 @@ class TaxesClientV2Test extends TestCase
         $this->client->jurisdictionLookup(['city' => 'Adairville']);
 
         Http::assertSent(fn ($request) => $request->hasHeader('Authorization', 'Bearer test-token'));
+    }
+
+    public function test_requests_are_sent_without_bearer_token_when_not_configured()
+    {
+        Config::set('taxes-sdk.token', null);
+        $client = $this->app->make(TaxesClientV2::class);
+
+        $client->jurisdictionLookup(['city' => 'Adairville']);
+
+        Http::assertSent(fn ($request) => ! $request->hasHeader('Authorization'));
     }
 
     protected function getPackageProviders($app): array
