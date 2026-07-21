@@ -19,7 +19,7 @@ abstract class AbstractTaxesClient
 
     protected readonly string $serviceUrl;
 
-    protected readonly string $token;
+    protected readonly ?string $token;
 
     public function __construct()
     {
@@ -29,11 +29,16 @@ abstract class AbstractTaxesClient
 
     protected function prepareRequest(): PendingRequest
     {
-        return Http::asJson()
+        $request = Http::asJson()
             ->withHeaders(['Accept' => 'application/json'])
-            ->withToken((string) $this->token)
             ->timeout(self::TIMEOUT)
             ->retry(self::TRIES, self::SLEEP);
+
+        if ($this->token) {
+            $request->withToken($this->token);
+        }
+
+        return $request;
     }
 
     /**
